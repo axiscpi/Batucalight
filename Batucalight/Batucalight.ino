@@ -39,8 +39,10 @@ Consomation Blanc 100% : XXX
 #define NUM_LEDS 54 // Nombre total de led du bandeau
 #define DATA_PIN 4 // Pin signal bandeau
 #define MENUMAX 8 // Nombre de menu disponibles
-#define pinBP 2 // ATTENTION, doit être une pin INTERRUPT (NANO -> Pin 2 ou 3)
-#define POT A1 // Pin potard
+#define pinBP1 2 // Pin BP1 - ATTENTION, doit être une pin INTERRUPT (NANO -> Pin D2 ou D3)
+#define pinBP2 3 // Pin BP2 - ATTENTION, doit être une pin INTERRUPT (NANO -> Pin D2 iu D3)
+#define POTFUNC A2 // Pin potard Fonction
+#define POTLUM A1 // Pin potard Luminosité
 #define LongChen NUM_LEDS/6 // Nombre de leds du chenillard simple 
 
 // Défintion des menus
@@ -70,17 +72,18 @@ CRGBArray<NUM_LEDS> leds ;
 
 void setup() { 
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
-  pinMode(pinBP, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(pinBP), ISRMENU, FALLING);
-  FastLED.setMaxPowerInVoltsAndMilliamps(5,1500);
-  Serial.begin(9600);
+  pinMode(pinBP1, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(pinBP1), ISRMENU, FALLING);
+  FastLED.setMaxPowerInVoltsAndMilliamps(5,2500);
+  //Serial.begin(9600);
 }
 
 void loop() { 
   FastLED.setBrightness(255) ;
   EtatInt = 0 ;
-  if (MENU == 1) TEST() ;
+  //if (MENU == 1) TEST() ;
   //if (MENU == 1) GOLD() ;
+  if (MENU == 1) SPECTRE() ;
   if (MENU == 2) BLEU() ;
   if (MENU == 3) WAVE() ;
   if (MENU == 4) CHENILLARD_JAUNE_BLEU() ;
