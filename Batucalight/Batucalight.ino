@@ -1,6 +1,10 @@
 /***********************************************************
 BATUCALIGHT V0.2
 25/03/2025
+- Ajout Palettes (Nouveau bouton, renommage menus, ajout des palettes dans les menus)
+- Nettoyage du code de certains menus
+- Wave passe à 4 premières couleurs de la palette
+
 ************************************************************
 Eclairages des intruments BATUK'A DUNES
 Conception et Réalisation Matthieu DELANEF
