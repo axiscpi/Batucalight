@@ -3,33 +3,55 @@ Programme de test
 ****************************************/
 
 void TEST() {
-  for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    leds[dot] = CRGB::White;
+  /*for(int dot = 0; dot < NUM_LEDS; dot++) { 
+    index = 16 ;
+    leds[dot] = ColorFromPalette(currentPalette, index);
+  } 
+  FastLED.setBrightness(analogRead(POTLUM)/4); 
+  FastLED.show();
+*/
+  for(int dot = 0; dot < NUM_LEDS; dot++) {
+    if (EtatInt == 1 ) break ;
+    index = 0 ;
+    leds(dot,dot+LongChen-1) = ColorFromPalette(currentPalette, index);
+    if ((dot+LongChen) > NUM_LEDS) {
+      index = 0 ;
+      leds[dot+LongChen-1-NUM_LEDS] = ColorFromPalette(currentPalette, index) ;
+    }
+    FastLED.setBrightness(analogRead(POTLUM)/4);
+    FastLED.show();
+    index = 16 ;
+    leds[dot] = ColorFromPalette(currentPalette, index) ;                  // clear this led for the next time around the loop
+    SpeedWAVE = (analogRead(POTFUNC) * 15 / 1024) ;
+    delay((SpeedWAVE*10)+10);
   }
 
   FastLED.setBrightness(analogRead(POTLUM)/4) ;
   FastLED.show();
   
-  Serial.println(analogRead(POTLUM)/4);
-  delay (5) ;
+  //Serial.println(analogRead(POTLUM)/4); // Debug
+  //Serial.println(PALETTE) ;             // Debug
+  //delay (5) ;                           // Debug
 }
 
 
 /***************************************
-"COULEUR" : Couleur solide du nom du programme
+"SOLIDX" : Couleur fixe
 ****************************************/
 
-void BLEU() {
+void SOLID1() {
   for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    leds[dot] = CRGB::DeepSkyBlue;
+    index = 0 ;   // Couleur 1 de la palette en cours
+    leds[dot] = ColorFromPalette(currentPalette, index);
   }
   FastLED.setBrightness(analogRead(POTLUM)/4);
   FastLED.show();
 }
 
-void GOLD() {
+void SOLID2() {
   for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    leds[dot] = CRGB::Gold;
+    index = 16 ;  // Couleur 2 de la palette en cours
+    leds[dot] = ColorFromPalette(currentPalette, index);
   }
   FastLED.setBrightness(analogRead(POTLUM)/4);
   FastLED.show();
@@ -39,28 +61,32 @@ void GOLD() {
 CHENILLARD_XXX_YYY : Chenillard XXX sur fond YYY
 ****************************************/
 
-void CHENILLARD_JAUNE_BLEU() {
-  for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    leds[dot] = CRGB::DeepSkyBlue;
+void CHENILLARD() {
+  for(int dot = 0; dot < NUM_LEDS; dot++) {               // A verifier si necessaire jusqu'à ...
+    index = 0 ;
+    leds[dot] = ColorFromPalette(currentPalette, index) ;
   } 
   FastLED.setBrightness(analogRead(POTLUM)/4); 
-  FastLED.show();
+  FastLED.show();                                         //...ici.
 
   for(int dot = 0; dot < NUM_LEDS; dot++) {
     if (EtatInt == 1 ) break ;
-    leds(dot,dot+LongChen-1) = CRGB::Gold;
+    index = 16 ;
+    leds(dot,dot+LongChen-1) = ColorFromPalette(currentPalette, index) ;
     if ((dot+LongChen) > NUM_LEDS) {
-      leds[dot+LongChen-1-NUM_LEDS] = CRGB::Gold ;
+      index = 16 ;
+      leds[dot+LongChen-1-NUM_LEDS] = ColorFromPalette(currentPalette, index) ;
     }
     FastLED.setBrightness(analogRead(POTLUM)/4);
     FastLED.show();
-    leds[dot] = CRGB::DeepSkyBlue ;                  // clear this led for the next time around the loop
+    index = 0 ;
+    leds[dot] = ColorFromPalette(currentPalette, index) ;                  // clear this led for the next time around the loop
     SpeedWAVE = (analogRead(POTFUNC) * 15 / 1024) ;
     delay((SpeedWAVE*10)+10);
   }
 }
 
-void CHENILLARD_BLEU_JAUNE() {
+void CHENILLARD_INV() {
   for(int dot = 0; dot < NUM_LEDS; dot++) { 
     leds[dot] = CRGB::Gold;
   } 
@@ -69,13 +95,16 @@ void CHENILLARD_BLEU_JAUNE() {
 
   for(int dot = 0; dot < NUM_LEDS; dot++) {
     if (EtatInt == 1 ) break ;
-    leds(dot,dot+LongChen-1) = CRGB::DeepSkyBlue;
+    index = 0 ;
+    leds(dot,dot+LongChen-1) = ColorFromPalette(currentPalette, index);
     if ((dot+LongChen) > NUM_LEDS) {
-      leds[dot+LongChen-1-NUM_LEDS] = CRGB::DeepSkyBlue ;
+      index = 0 ;
+      leds[dot+LongChen-1-NUM_LEDS] = ColorFromPalette(currentPalette, index) ;
     }
     FastLED.setBrightness(analogRead(POTLUM)/4);
     FastLED.show();
-    leds[dot] = CRGB::Gold ;                  // clear this led for the next time around the loop
+    index = 16 ;
+    leds[dot] = ColorFromPalette(currentPalette, index) ;                  // clear this led for the next time around the loop
     SpeedWAVE = (analogRead(POTFUNC) * 15 / 1024) ;
     delay((SpeedWAVE*10)+10);
   }
@@ -113,31 +142,36 @@ FACE_A_FACE : 2 demi cercles tournants face à face
 ****************************************/
 void FACE_A_FACE() {
   for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    leds[dot] = CRGB::Gold;
+    index = 16 ;
+    leds[dot] = ColorFromPalette(currentPalette, index);
   }
   FastLED.setBrightness(analogRead(POTLUM)/4);  
   FastLED.show();
 
   for(int dot = 0; dot < NUM_LEDS; dot++) {
     if (EtatInt == 1 ) break ;
-    leds(dot,dot+(NUM_LEDS/2)-1) = CRGB::DeepSkyBlue;
+    index = 0 ;
+    leds(dot,dot+(NUM_LEDS/2)-1) = ColorFromPalette(currentPalette, index) ;
     if ((dot+(NUM_LEDS/2)) > NUM_LEDS) {
-      leds[dot+(NUM_LEDS/2)-1-NUM_LEDS] = CRGB::DeepSkyBlue ;
+      index = 0 ;
+      leds[dot+(NUM_LEDS/2)-1-NUM_LEDS] = ColorFromPalette(currentPalette, index) ;
     }
     FastLED.setBrightness(analogRead(POTLUM)/4);
     FastLED.show();
-    leds[dot] = CRGB::Gold ;                  // clear this led for the next time around the loop
+    index = 16 ;
+    leds[dot] = ColorFromPalette(currentPalette, index) ;                  // clear this led for the next time around the loop
     SpeedWAVE = (analogRead(POTFUNC) * 15 / 1024) ;
     delay((SpeedWAVE*12+10));
   }
 }
 
 /***************************************
-WAVE : Battement entre 2 couleurs solides
+WAVE : Battement entre les couleurs de la palette
 ****************************************/
 void WAVE() {
   for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    leds[dot] = CRGB::DeepSkyBlue;
+    index = 0 ;
+    leds[dot] = ColorFromPalette(currentPalette, index);
   }
   for(int Brightness = 0; Brightness < 100; Brightness++) { 
     if (EtatInt == 1 ) break ;
@@ -155,7 +189,46 @@ void WAVE() {
   }
 
   for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    leds[dot] = CRGB::Gold;
+    index = 16 ;
+    leds[dot] = ColorFromPalette(currentPalette, index) ;
+  }
+  for(int Brightness = 0; Brightness < 100; Brightness++) {
+    if (EtatInt == 1 ) break ; 
+    FastLED.setBrightness(Brightness);
+    FastLED.show(); 
+    SpeedWAVE = (analogRead(POTFUNC) * 15 / 1024) ;
+    delay((SpeedWAVE*4)+10);
+  }
+  for(int Brightness = 100; Brightness > 0; Brightness--) { 
+    if (EtatInt == 1 ) break ;
+    FastLED.setBrightness(Brightness);
+    FastLED.show(); 
+    SpeedWAVE = (analogRead(POTFUNC) * 15 / 1024) ;
+    delay((SpeedWAVE*4)+10);
+  }
+
+  for(int dot = 0; dot < NUM_LEDS; dot++) { 
+    index = 32 ;
+    leds[dot] = ColorFromPalette(currentPalette, index) ;
+  }
+  for(int Brightness = 0; Brightness < 100; Brightness++) {
+    if (EtatInt == 1 ) break ; 
+    FastLED.setBrightness(Brightness);
+    FastLED.show(); 
+    SpeedWAVE = (analogRead(POTFUNC) * 15 / 1024) ;
+    delay((SpeedWAVE*4)+10);
+  }
+  for(int Brightness = 100; Brightness > 0; Brightness--) { 
+    if (EtatInt == 1 ) break ;
+    FastLED.setBrightness(Brightness);
+    FastLED.show(); 
+    SpeedWAVE = (analogRead(POTFUNC) * 15 / 1024) ;
+    delay((SpeedWAVE*4)+10);
+  }
+
+  for(int dot = 0; dot < NUM_LEDS; dot++) { 
+    index = 48 ;
+    leds[dot] = ColorFromPalette(currentPalette, index) ;
   }
   for(int Brightness = 0; Brightness < 100; Brightness++) {
     if (EtatInt == 1 ) break ; 
@@ -192,21 +265,29 @@ QUATRE_QUARTS : 4 quarts de cercles tournants en face à face
 void QUATRE_QUARTS() {
   for(int dot = 0; dot < NUM_LEDS; dot++) {
     if (EtatInt == 1 ) break ;
-    leds(dot,dot+(NUM_LEDS/4)-1) = CRGB::DeepSkyBlue;
+    index = 0 ;
+    leds(dot,dot+(NUM_LEDS/4)-1) = ColorFromPalette(currentPalette, index);
     if ((dot+(NUM_LEDS/4)) > NUM_LEDS) {
-      leds[dot+(NUM_LEDS/4)-1-NUM_LEDS] = CRGB::DeepSkyBlue ;
+      index = 0 ;
+      leds[dot+(NUM_LEDS/4)-1-NUM_LEDS] = ColorFromPalette(currentPalette, index) ;
     }
-    leds(dot+(NUM_LEDS/4),dot+(NUM_LEDS/2)-1) = CRGB::Gold;
+    index = 16 ;
+    leds(dot+(NUM_LEDS/4),dot+(NUM_LEDS/2)-1) = ColorFromPalette(currentPalette, index) ;
     if ((dot+(NUM_LEDS/2)) > NUM_LEDS) {
-      leds[dot+(NUM_LEDS/2)-1-NUM_LEDS] = CRGB::Gold ;
+      index = 16 ;
+      leds[dot+(NUM_LEDS/2)-1-NUM_LEDS] = ColorFromPalette(currentPalette, index) ;
     }
-    leds(dot+(NUM_LEDS/2),dot+(NUM_LEDS*3/4)-1) = CRGB::DeepSkyBlue;
+    index = 32 ;
+    leds(dot+(NUM_LEDS/2),dot+(NUM_LEDS*3/4)-1) = ColorFromPalette(currentPalette, index);
     if ((dot+(NUM_LEDS*3/4)) > NUM_LEDS) {
-      leds[dot+(NUM_LEDS*3/4)-1-NUM_LEDS] = CRGB::DeepSkyBlue ;
+      index = 32 ;
+      leds[dot+(NUM_LEDS*3/4)-1-NUM_LEDS] = ColorFromPalette(currentPalette, index) ;
     }
-    leds(dot+(NUM_LEDS*3/4),dot+NUM_LEDS-1) = CRGB::Gold;
+    index = 48 ;
+    leds(dot+(NUM_LEDS*3/4),dot+NUM_LEDS-1) = ColorFromPalette(currentPalette, index);
     if ((dot+NUM_LEDS) > NUM_LEDS) {
-      leds[dot+NUM_LEDS-1-NUM_LEDS] = CRGB::Gold ;
+      index = 48 ;
+      leds[dot+NUM_LEDS-1-NUM_LEDS] = ColorFromPalette(currentPalette, index) ;
     }
     FastLED.setBrightness(analogRead(POTLUM)/4);
     FastLED.show();
