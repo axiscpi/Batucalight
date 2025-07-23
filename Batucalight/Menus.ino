@@ -36,21 +36,16 @@ void TEST() {
 
 
 /***************************************
-"SOLIDX" : Couleur fixe
+"SOLID" : Couleur fixe
 ****************************************/
 
-void SOLID1() {
+void SOLID() {
   for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    index = 0 ;   // Couleur 1 de la palette en cours
-    leds[dot] = ColorFromPalette(currentPalette, index);
-  }
-  FastLED.setBrightness(analogRead(POTLUM)/4);
-  FastLED.show();
-}
-
-void SOLID2() {
-  for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    index = 16 ;  // Couleur 2 de la palette en cours
+    if (analogRead(POTFUNC)>0 && analogRead(POTFUNC)<255) index = 0 ;
+    if (analogRead(POTFUNC)>256 && analogRead(POTFUNC)<511) index = 16 ;
+    if (analogRead(POTFUNC)>512 && analogRead(POTFUNC)<767) index = 32 ;
+    if (analogRead(POTFUNC)>768 && analogRead(POTFUNC)<1025) index = 48 ;
+    //index = 16 ;  // Couleur 2 de la palette en cours
     leds[dot] = ColorFromPalette(currentPalette, index);
   }
   FastLED.setBrightness(analogRead(POTLUM)/4);
@@ -88,7 +83,8 @@ void CHENILLARD() {
 
 void CHENILLARD_INV() {
   for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    leds[dot] = CRGB::Gold;
+    index = 16 ;
+    leds[dot] = ColorFromPalette(currentPalette, index);
   } 
   FastLED.setBrightness(analogRead(POTLUM)/4); 
   FastLED.show();

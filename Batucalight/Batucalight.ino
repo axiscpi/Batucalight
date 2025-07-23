@@ -1,9 +1,7 @@
 /***********************************************************
-BATUCALIGHT V0.2
-25/03/2025
-- Ajout Palettes (Nouveau bouton, renommage menus, ajout des palettes dans les menus)
-- Nettoyage du code de certains menus
-- Wave passe à 4 premières couleurs de la palette
+BATUCALIGHT V0.3
+26/04/2025
+- Ajout menu Twinkle
 
 ************************************************************
 Eclairages des intruments BATUK'A DUNES
@@ -29,44 +27,50 @@ Consomation Blanc 100% : XXX
 Repinique XX" Uli : XX Leds à 30 leds par metre
 Consomation Blanc 100% : XXX
 
+Bandeau d'essai : 31 Leds
+
 *************************************************************/
 
 #include <FastLED.h>
 
-#define NUM_LEDS 52 // Nombre total de led du bandeau
+/***********************************************************
+Configuration :
+************************************************************/
+#define NUM_LEDS 41 // Nombre total de led du bandeau
 #define DATA_PIN 4 // Pin signal bandeau
-#define MENUMAX 8 // Nombre de menu disponibles
-#define PALETTEMAX 3 // Nombre de palettes disponibles
 #define pinBP1 2 // MENU Pin BP1 - ATTENTION, doit être une pin INTERRUPT (NANO -> Pin D2 ou D3)
 #define pinBP2 3 // PALETTE Pin BP2 - ATTENTION, doit être une pin INTERRUPT (NANO -> Pin D2 ou D3)
 #define POTFUNC A2 // Pin potard Fonction
 #define POTLUM A1 // Pin potard Luminosité
-#define LongChen NUM_LEDS/5 // Nombre de leds du chenillard simple 
+
+#define MENUMAX 7 // Nombre de menu disponibles
+#define PALETTEMAX 2 // Nombre de palettes disponibles
+#define LongChen NUM_LEDS/3 // Nombre de leds du chenillard simple 
 
 // Défintion des menus
 void TEST() ;
-void SOLID1() ;
-void SOLID2() ;
+void SOLID() ;
 void WAVE() ;
 void CHENILLARD() ;
 void CHENILLARD_INV() ;
 void SPECTRE() ;
 void FACE_A_FACE() ;
 void QUATRE_QUARTS() ;
+void TWINKLE() ;
 
 // Défintion du programme d'interruption ISR
 void ISRMENU() ;
 void ISRPALETTE() ;
 
-// Défintion des constantes-variables
+// Défintion des variables
 volatile byte MENU = 1 ;
 volatile byte PALETTE = 1 ;
 bool EtatInt = false ;
 const unsigned long dureeAntiRebond = 200;
 byte Brightness = 1 ;
 byte SpeedWAVE = 5 ;
-int SpectreColor = 0 ;
-uint8_t index = 0 ;
+byte SpectreColor = 0 ; // Vérifier si OK sinon revenir à int
+byte index = 0 ; // Vérifier si OK sinon revenir à uint8_t
 
 //CRGB leds[NUM_LEDS] ;
 CRGBArray<NUM_LEDS> leds ;
@@ -82,27 +86,30 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(pinBP1), ISRMENU, FALLING);
   attachInterrupt(digitalPinToInterrupt(pinBP2), ISRPALETTE, FALLING);
   FastLED.setMaxPowerInVoltsAndMilliamps(5,2500);
-  currentPalette = Batukadune ;
+  PALETTE = 1 ;
   //Serial.begin(9600); // Pour le debug
 }
 
 void loop() { 
-  FastLED.setBrightness(255) ;
+  FastLED.setBrightness(255) ; // A vérifier si nécéssaire
   EtatInt = 0 ;
+  
+  //MàJ de la Palette :
   if (PALETTE == 1) currentPalette = Batukadune ;
   if (PALETTE == 2) currentPalette = Tukafac ;
-  if (PALETTE == 3) currentPalette = Police ;
+  //if (PALETTE == 3) currentPalette = Police ;
 
+  // MàJ du Menu :
   //if (MENU == 1) TEST() ;
-  if (MENU == 1) SOLID1() ;
-  //if (MENU == 1) SPECTRE() ;
-  if (MENU == 2) SOLID2() ;
+  //if (MENU == 1) SOLID1() ;
+  if (MENU == 1) TWINKLE() ;
+  if (MENU == 2) SOLID() ;
   if (MENU == 3) WAVE() ;
   if (MENU == 4) CHENILLARD() ;
   if (MENU == 5) CHENILLARD_INV() ;
   if (MENU == 6) QUATRE_QUARTS() ;
-  if (MENU == 7) FACE_A_FACE() ;
-  if (MENU == 8) SPECTRE() ;
+  //if (MENU == 7) FACE_A_FACE() ;
+  if (MENU == 7) SPECTRE() ;
 }
 
 // Menu d'interruption ISR permet de changer le menu au clic du bouton.
@@ -142,4 +149,3 @@ void ISRPALETTE() {
   }
 
 }
-
