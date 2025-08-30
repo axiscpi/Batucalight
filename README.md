@@ -76,23 +76,6 @@ Le mode RF permet de synchroniser plusieurs instruments :
 - Les instruments **esclaves** reçoivent les commandes
 - Synchronisation automatique des effets et des palettes
 
-## 💡 Personnalisation
-
-### Ajouter un nouvel effet
-1. Créer un fichier `MonEffet.ino`
-2. Implémenter la fonction `void MONEFFET()`
-3. Ajouter l'appel dans `CHANGEMENU()`
-4. Incrémenter `MENUMAX`
-
-### Créer une palette
-Dans `Palettes.ino`, ajouter :
-```cpp
-CRGBPalette16 MaPalette(
-  CRGB::Couleur1,    // Index 0
-  CRGB::Couleur2,    // Index 16
-  // ... 14 autres couleurs
-);
-```
 ## 🎵 Contexte artistique
 
 BATUCALIGHT a été conçu spécifiquement pour **BATUK'A DUNES**, la Batucada du bassin d'Arcachon. Le système permet de :
@@ -102,8 +85,8 @@ BATUCALIGHT a été conçu spécifiquement pour **BATUK'A DUNES**, la Batucada d
 
 ## 👨‍💻 Auteur
 
-**Matthieu DELANEF**
-- Conception et réalisation BATUCALIGHT
+**BATUCALIGHT**
+- Conception et réalisation : Matthieu DELANEF
 - Développement pour BATUK'A DUNES
 
 ## 📄 Licence
