@@ -6,7 +6,7 @@ Utilise la totalité des couleurs de la palette
 void WAVE() {
   SETPARALUM();
   for (index = 0; index <= 80 ; index = index + 16) {
-    if (EtatInt == 1 ) break ;
+    if (EtatInt == 1 || IntRF == 1) break ;
     for(int dot = 0; dot < NUMLEDS; dot++) { 
       leds[dot] = ColorFromPalette(currentPalette, index);
     }

@@ -1,14 +1,54 @@
+// Structure pour associer nom de menu et fonction
+struct MenuEntry {
+  const char* nom;
+  void (*fonction)();
+};
+
+// Tableau de correspondance nom/fonction - Doit être identique aux menus du MASTER
+MenuEntry menuTable[] = {
+  {"TWINKLE", TWINKLE},
+  {"SOLID", SOLID},
+  {"WAVE", WAVE},
+  {"CHENILLARD", CHENILLARD},
+  {"ROUE", ROUE},
+  {"SPECTRE", SPECTRE}
+};
+
+const int nombreMenus = sizeof(menuTable) / sizeof(menuTable[0]);
+
+// Structure pour associer nom de palette et palette
+struct PaletteEntry {
+  const char* nom;
+  CRGBPalette16 palette;
+};
+
+// Tableau de correspondance nom/palette - Doit être identique aux palettes du MASTER et palettes disponibles.
+PaletteEntry paletteTable[] = {
+  {"BTKDRAINBOW", BTKDRAINBOW},
+  {"BTKDBLEUJAUNE", BTKDBLEUJAUNE},
+  {"BTKDORANGBLEU", BTKDORANGBLEU},
+  {"Rainbow", Rainbow},
+  {"Tukafac", Tukafac}
+};
+
+const int nombrePalettes = sizeof(paletteTable) / sizeof(paletteTable[0]);
+
+// Fonction vide utilisée lorsqu'aucun menu n'est reçu
+void VIDE() {
+  for(int dot = 0; dot < NUMLEDS; dot++) { 
+    leds[dot] = CRGB::Black;
+  }
+  FastLED.show();
+  delay(50);
+}
+
 void testRF(){
-  //Serial.print("Test RF en cours");         // Si debug
-  //Serial.println(radio.isChipConnected());  // Si debug
     if (radio.available()) {
     radio.read(&message, sizeof(message));                        // Si un message vient d'arriver, on le charge dans la variable "message"...
-//A verifier si necessaire...
     byte Menu = message.MenuMaster;
     byte Palette = message.PalMaster;
     byte Luminosite = message.LumMaster;
     byte Parametre = message.ParaMaster;
-// ...jusqu'ici.
     Compare();                                                    // ... et on met à jour les données en cours.
   }
 }
@@ -17,35 +57,27 @@ void RF(){
   radio.stopListening(); // Necessaire ? A verifier...
   radio.startListening();
   testRF();
- /*Si debug
-  Serial.print("Chip Connection Status: "); 
-  Serial.println(radio.isChipConnected());     
-  Serial.print("Menu Recu: ");                  
-  Serial.print(message.MenuMaster);             
-  Serial.print(", ");                           
-  Serial.print("Menu EC: "); 
-  Serial.print(DonneesEC.Menu);
-  Serial.print(", ");
-  Serial.print("Palette : "); 
-  Serial.print(PALETTE);
-  Serial.print(", ");
-  //Serial.print("Luminosite : "); 
-  //Serial.print(Luminosite);
-  //Serial.print(", ");
-  //Serial.print("Parametre : "); 
-  //Serial.print(Parametre);
-  //Serial.print(". ");
-  Serial.println(millis()/1000);
-  //delay(1000);
-//...si debug.
-*/
+// Recherche Palette
+  if (strlen(message.PalMaster) > 0) {
+    for(int i = 0; i < nombrePalettes; i++) {
+      if(strcmp(message.PalMaster, paletteTable[i].nom) == 0) {
+        currentPalette = paletteTable[i].palette;
+        strcpy(DonneesEC.Palette, message.PalMaster);
+        break;
+      }
+    }
+  }
   IntRF = false;
-  if (DonneesEC.Menu == 1) TWINKLE() ; // OK RF
-  if (DonneesEC.Menu == 2) SOLID() ; // OK RF
-  if (DonneesEC.Menu == 3) WAVE(); // OK RF
-  if (DonneesEC.Menu == 4) CHENILLARD(); // OK RF
-  if (DonneesEC.Menu == 5) ROUE(); // OK RF
-  if (DonneesEC.Menu == 6) SPECTRE(); // OK RF
+  PointeurMenuRF = VIDE;
+  
+// Recherche menu
+  for(int i = 0; i < nombreMenus; i++) {
+    if(strcmp(DonneesEC.Menu, menuTable[i].nom) == 0) {
+      PointeurMenuRF = menuTable[i].fonction;
+      break;
+    }
+  }
+  PointeurMenuRF();
   if (EtatInt == 1 ) loop() ;
 }
 
@@ -54,22 +86,23 @@ Compare les données en cours, avec les données recues.
 Si données différentes, 
 *************************************************************/
 void Compare() {
-  if ((DonneesEC.Menu) == (message.MenuMaster)) {
-    //Serial.print("Menu identique. ");
+  if (strcmp(DonneesEC.Menu, message.MenuMaster) == 0) {
   }
   else {
-    DonneesEC.Menu = message.MenuMaster;
+    strcpy(DonneesEC.Menu, message.MenuMaster);
     IntRF = 1;
-    //Serial.print("Menu modifié ! ");
   }
-  if ((DonneesEC.Palette) == (message.PalMaster)) {
-    //Serial.print("Palette identique. ");
+  
+  if (strcmp(DonneesEC.Palette, message.PalMaster) == 0) {
   }
   else {
-    DonneesEC.Palette = message.PalMaster;
-    PALETTE = DonneesEC.Palette;
-    CHANGEPALETTE();
-    //Serial.print("Pallette Modifiée ! ");
+    strcpy(DonneesEC.Palette, message.PalMaster);
+    for(int i = 0; i < nombrePalettes; i++) {
+      if(strcmp(DonneesEC.Palette, paletteTable[i].nom) == 0) {
+        currentPalette = paletteTable[i].palette;
+        break;
+      }
+    }
   }
 }
 

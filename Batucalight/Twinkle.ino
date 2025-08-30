@@ -33,9 +33,14 @@ CRGB gBackgroundColor = CRGB::Black;
 // If COOL_LIKE_INCANDESCENT is set to 1, colors will 
 // fade out slighted 'reddened', similar to how
 // incandescent bulbs change color as they get dim down.
-#define COOL_LIKE_INCANDESCENT 1
+#define COOL_LIKE_INCANDESCENT 0
  
 void TWINKLE() {
+/*static unsigned long dernierTestRF;
+if (MENU == MENURF && (millis() - dernierTestRF > 250)) {
+  
+  dernierTestRF = millis();
+}*/
 SETPARALUM();
 drawTwinkles( leds);
 if (EtatInt == 1 ) loop() ;

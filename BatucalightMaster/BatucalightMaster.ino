@@ -62,9 +62,9 @@ void setup() {
   radio.setAutoAck(false);            // N'attend pas d'accusé reception du message du recepteur
   radio.stopListening();              // Arrêt de l'écoute du NRF24 (signifiant qu'on va émettre, et non recevoir, ici)
   
-  radio.printPrettyDetails();         // Si Debug
-  Serial.print("Chip Connection Status: "); // Si Debug
-  Serial.println(radio.isChipConnected()); // Si Debug
+  //radio.printPrettyDetails();         // Si Debug
+  //Serial.print("Chip Connection Status: "); // Si Debug
+  //Serial.println(radio.isChipConnected()); // Si Debug
 
   attachInterrupt(digitalPinToInterrupt(pinBP1), ISRMENU, FALLING);
   attachInterrupt(digitalPinToInterrupt(pinBP2), ISRPALETTE, FALLING);
@@ -77,17 +77,17 @@ void setup() {
 
 void loop() {
   // Défintion des menus - ATTENTION : 14 CARACTERE MAXIMUM POUR LE NOM DU MENU
-  if (NumMenu == 1) message.MenuMaster = TWINKLE ;
-  if (NumMenu == 2) message.MenuMaster = SOLID ;
-  if (NumMenu == 3) message.MenuMaster = WAVE;
-  if (NumMenu == 4) message.MenuMaster = CHENILLARD;
-  if (NumMenu == 5) message.MenuMaster = ROUE;
-  if (NumMenu == 6) message.MenuMaster = SPECTRE;
+  if (NumMenu == 1) strcpy(message.MenuMaster, "TWINKLE");
+  if (NumMenu == 2) strcpy(message.MenuMaster, "SOLID");
+  if (NumMenu == 3) strcpy(message.MenuMaster, "WAVE");
+  if (NumMenu == 4) strcpy(message.MenuMaster, "CHENILLARD");
+  if (NumMenu == 5) strcpy(message.MenuMaster, "ROUE");
+  if (NumMenu == 6) strcpy(message.MenuMaster, "SPECTRE");
 
   // Défintion des palettes - ATTENTION : 14 CARACTERE MAXIMUM POUR LE NOM DE LA PALETTE
-  if (NumPal == 1) message.PalMaster = Batukadune ;
-  if (NumPal == 2) message.PalMaster = BTKD2 ;
-  if (NumPal == 3) message.PalMaster = Rainbow ;
+  if (NumPal == 1) strcpy(message.PalMaster, "BTKDBLEUJAUNE");
+  if (NumPal == 2) strcpy(message.PalMaster, "BTKDORANGBLEU");
+  if (NumPal == 3) strcpy(message.PalMaster, "BTKDRAINBOW");
 
   // Défintion ParaLum
   message.ParaMaster = (analogRead(POTFUNC)/4);
@@ -95,7 +95,7 @@ void loop() {
 
   // Envoi du message
   radio.write(&message, sizeof(message));     // Envoi de notre message
-  delay(150);
+  delay(50);
 }
 
 void ISRMENU() {

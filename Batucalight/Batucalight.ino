@@ -3,13 +3,15 @@ ____  _  ___  _ _  __   _   _    _  __  _ _  ___
 | o )/ \|_ _|| | |/ _| / \ | |  | |/ _|| U ||_ _|
 | o \ o || | | U ( (_ | o || |_ | ( |_n|   | | | 
 |___/_n_||_| |___|\__||_n_||___||_|\__/|_n_| |_| 
-                                                 
-BATUCALIGHT V0.4 - 04/05/2025 - 08/08/2025
-- Ajout liaison RF, Pilotage par boitier master.
-- Debug menus visuels
-************************************************************
+
 Eclairages des intruments BATUK'A DUNES
-Conception et Réalisation Matthieu DELANEF
+Conception et Réalisation : Matthieu DELANEF
+
+BATUCALIGHT V0.5 - 09/08/2025
+- Gestion des menu et palettes par leur nom et plus par numéro pour permettre au boitier d'harmoniser les instruments même si les menus ou palettes indépendament de l'ordre des menus/palettes.
+- Correction Chenillard.ino (ajout de IntRF manquant)
+- Modification de l'effet Chenillard pour gerer les 6 couleurs de la palette.
+- Correction RF.ino (Vérification Palette à chanque lancement du menu RF)
 ************************************************************/
 
 /************************************************************
@@ -23,9 +25,9 @@ Libraries :
 /***********************************************************
 Configuration de l'instrument :
 ************************************************************/
-#define NUMLEDS 31 // Nombre total de led du bandeau
+#define NUMLEDS 52 // Nombre total de led du bandeau
 #define MENUMAX 7 // Nombre de menu disponibles
-#define PALETTEMAX 4 // Nombre de palettes disponibles
+#define PALETTEMAX 3 // Nombre de palettes disponibles
 #define MENURF MENUMAX // Numéro du menu RF (MENUMAX si le menu RF est le dernier.)
 
 /***********************************************************
@@ -46,19 +48,18 @@ RF24
 #define tunnel  "PIPE1"       // On définit un "nom de tunnel" (5 caractères), pour pouvoir communiquer d'un NRF24 à l'autre
 RF24 radio(pinCE, pinCSN);    // Instanciation du NRF24L01
 const byte adresse[6] = tunnel;    // Mise au format "byte array" du nom du tunnel
-//char message[32];                     // Avec cette librairie, on est "limité" à 32 caractères par message
 
 struct message {
-	byte MenuMaster;
-  byte PalMaster;
+	char MenuMaster[15];
+  char PalMaster[15];
   byte LumMaster;
   byte ParaMaster; 
 };
 message message;
 
 struct DonneesEC {
-	byte Menu;
-  byte Palette;
+	char Menu[15];
+  char Palette[15];
   byte Luminosite;
   byte Parametre;  
 };
@@ -74,6 +75,7 @@ Ajout d'un menu :
 - Description du programme du menu.
 
 ***********************************************************/
+// ATTENTION : 14 CARACTERE MAXIMUM POUR LE NOM DU MENU
 void TEST() ;
 void SOLID() ;
 void WAVE() ;
@@ -82,6 +84,9 @@ void SPECTRE() ;
 void ROUE() ;
 void TWINKLE() ;
 void RF() ;
+
+void(*PointeurMenu)();
+void(*PointeurMenuRF)();
 
 /***********************************************************
 Programmes divers
@@ -108,16 +113,20 @@ byte LUMINOSITE = 128 ;
 byte PARAMETRE = 128 ;
 byte index = 0 ;
 // Défintion des variables RF
-byte Luminosite = 255 ;
-byte Parametre = 255 ; 
+byte Luminosite = 255 ; // Nécéssaire ?
+byte Parametre = 255 ;  // Nécéssaire ?
+byte NumMenu = 1 ;
+byte NumPal = 1 ;
 
 //CRGB leds[NUMLEDS] ;
+// ATTENTION : 14 CARACTERE MAXIMUM POUR LE NOM DE LA PALETTE
 CRGBArray<NUMLEDS*2> leds ;
 CRGBPalette16 currentPalette;
-extern CRGBPalette16 Batukadune;
+extern CRGBPalette16 BTKDBLEUJAUNE;
+extern CRGBPalette16 BTKDRAINBOW;
+extern CRGBPalette16 BTKDORANGBLEU;
 extern CRGBPalette16 Tukafac;
-extern CRGBPalette16 Rainbow;
-extern CRGBPalette16 BTKD2;
+extern CRGBPalette16 Rainbow; 
 
 /***********************************************************
 SETUP
@@ -130,8 +139,8 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(pinBP1), ISRMENU, FALLING);
   attachInterrupt(digitalPinToInterrupt(pinBP2), ISRPALETTE, FALLING);
   FastLED.setMaxPowerInVoltsAndMilliamps(5,2500);
-  Serial.begin(9600);     // Si debug
-  printf_begin();         // Si debug, pour le print PrettyDetails
+  //Serial.begin(9600);     // Si debug
+  //printf_begin();         // Si debug, pour le print PrettyDetails
   radio.begin();          // Initialisation du module NRF24
   radio.openReadingPipe(0, adresse);  // Ouverture du tunnel en LECTURE, avec le "nom" qu'on lui a donné
   radio.setPALevel(RF24_PA_MIN);	// RF24_PA_MIN, RF24_PA_LOW, RF24_PA_HIGH, ou RF24_PA_MAX
@@ -139,9 +148,6 @@ void setup() {
   radio.setChannel(120); 		// en remplaçant « x » par une valeur comprise entre 0 et 125
   radio.setAutoAck(false);
   radio.startListening();		// permet de pouvoir utiliser la fonction « read » par la suite
-  //Serial.print("Chip Connection Status: "); // Si debug
-  //Serial.println(radio.isChipConnected());  // Si debug
-  //radio.printPrettyDetails();               // Si debug
 }
 
 /***********************************************************
@@ -154,35 +160,38 @@ void loop() {
   EtatInt = 0 ;
   CHANGEMENU();
   CHANGEPALETTE();
+  PointeurMenu();
 }
 
 /***********************************************************
 Changement du menu
 ***********************************************************/
 void CHANGEMENU() {
-  if (MENU == 1) TWINKLE() ; // OK RF
-  if (MENU == 2) SOLID() ; // OK RF
-  if (MENU == 3) WAVE() ; // OK RF
-  if (MENU == 4) CHENILLARD() ; // OK RF
-  if (MENU == 5) ROUE() ; // OK RF
-  if (MENU == 6) SPECTRE() ; // OK RF
-  if (MENU == 7) RF() ; // TOUJOURS LE DERNIER sinon modifier le #define MENURF
+  if (MENU == 1) PointeurMenu = TWINKLE ;
+  if (MENU == 2) PointeurMenu = SOLID ;
+  if (MENU == 3) PointeurMenu = WAVE ;
+  if (MENU == 4) PointeurMenu = CHENILLARD ;
+  if (MENU == 5) PointeurMenu = ROUE ;
+  if (MENU == 6) PointeurMenu = SPECTRE ;
+  if (MENU == 7) PointeurMenu = RF ; // TOUJOURS LE DERNIER sinon modifier le #define MENURF
 }
 
 /***********************************************************
 Changement de palette
 ***********************************************************/
 void CHANGEPALETTE() {
-  if (PALETTE == 1) currentPalette = Batukadune ;
-  if (PALETTE == 2) currentPalette = Tukafac ;
-  if (PALETTE == 3) currentPalette = Rainbow ;
-  if (PALETTE == 4) currentPalette = BTKD2 ;
+  if (MENU != MENURF) {
+    if (PALETTE == 1) currentPalette = BTKDBLEUJAUNE ;   
+    if (PALETTE == 2) currentPalette = BTKDORANGBLEU ;
+    if (PALETTE == 3) currentPalette = BTKDRAINBOW ;
+  }
 }
 
 /***********************************************************
 Menu de défintion du paramètre et de la luminosité
 ***********************************************************/
 void SETPARALUM() {
+// Set Paramètre
   if (MENU == MENURF) {
     testRF();
     PARAMETRE = message.ParaMaster ;
@@ -190,7 +199,7 @@ void SETPARALUM() {
   else {
     PARAMETRE = map(analogRead(POTFUNC),0,1023,0,255) ;
   }
-  // Set Luminosité
+// Set Luminosité
   if (MENU == MENURF) {
     testRF();
     if (message.LumMaster < 5) {
@@ -212,8 +221,8 @@ void SETPARALUM() {
 
 /***********************************************************
 Menu d'interruption ISR permet de changer le menu / palette au clic du bouton.
-Attention, ne termine pas l'effet visuel en cours,
-il faut vérifier EtatInt=1 et break la boucle for pour repartir dans le loop()
+Attention, ne termine pas l'effet visuel en cours si boucle FOR,
+il faut vérifier EtatInt=1 et break la boucle FOR pour repartir dans le loop()
 ***********************************************************/
 void ISRMENU() {
   static unsigned long dateDernierChangement = 0;
