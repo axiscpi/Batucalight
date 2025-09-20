@@ -9,7 +9,7 @@
 
 ## 📖 Description
 
-BATUCALIGHT est un système d'éclairage intelligent conçu pour sublimer les performances du groupe de percussion **BATUK'A DUNES**. Chaque instrument peut être équipé de bandeaux LED programmables offrant des effets visuels synchronisés et personnalisables.
+BATUCALIGHT est un système d'éclairage intelligent conçu pour sublimer les performances du groupe de percussion **BATUK'A DUNE**. Chaque instrument peut être équipé de bandeaux LED programmables offrant des effets visuels synchronisés et personnalisables.
 
 ### ✨ Caractéristiques principales
 
@@ -78,7 +78,7 @@ Le mode RF permet de synchroniser plusieurs instruments :
 
 ## 🎵 Contexte artistique
 
-BATUCALIGHT a été conçu spécifiquement pour **BATUK'A DUNES**, la Batucada du bassin d'Arcachon. Le système permet de :
+BATUCALIGHT a été conçu spécifiquement pour **BATUK'A DUNE**, la Batucada du bassin d'Arcachon. Le système permet de :
 - Créer une **identité visuelle** unique lors des performances
 - Offrir une **expérience immersive** au public
 - **Personnaliser** l'ambiance selon les morceaux
@@ -87,7 +87,7 @@ BATUCALIGHT a été conçu spécifiquement pour **BATUK'A DUNES**, la Batucada d
 
 **BATUCALIGHT**
 - Conception et réalisation : Matthieu DELANEF
-- Développement pour BATUK'A DUNES
+- Développement pour BATUK'A DUNE
 
 ## 📄 Licence
 
