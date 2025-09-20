@@ -1,6 +1,6 @@
 # 🎵 BATUCALIGHT
 
-> Système d'éclairage LED synchronisé pour instruments de percussion - BATUK'A DUNES
+> Système d'éclairage LED synchronisé pour instruments de percussion - BATUK'A DUNE
 
 ![Arduino](https://img.shields.io/badge/Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white)
 ![C++](https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)
