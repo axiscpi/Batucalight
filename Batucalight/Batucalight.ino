@@ -7,11 +7,8 @@ ____  _  ___  _ _  __   _   _    _  __  _ _  ___
 Eclairages des intruments BATUK'A DUNES
 Conception et Réalisation : Matthieu DELANEF
 
-BATUCALIGHT V0.5 - 09/08/2025
-- Gestion des menu et palettes par leur nom et plus par numéro pour permettre au boitier d'harmoniser les instruments même si les menus ou palettes indépendament de l'ordre des menus/palettes.
-- Correction Chenillard.ino (ajout de IntRF manquant)
-- Modification de l'effet Chenillard pour gerer les 6 couleurs de la palette.
-- Correction RF.ino (Vérification Palette à chanque lancement du menu RF)
+BATUCALIGHT V1.0 - 20/09/2025
+- Mise en OPER
 ************************************************************/
 
 /************************************************************

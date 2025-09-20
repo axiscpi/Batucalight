@@ -7,8 +7,8 @@ void SPECTRE() {
   for(int dot = 0; dot < NUMLEDS; dot++) { 
     leds[dot].setHue(PARAMETRE) ;
   }
+  Serial.println(PARAMETRE);
   FastLED.setBrightness(LUMINOSITE);
   FastLED.show();
   delay(5);
-
 }
