@@ -35,7 +35,7 @@ BATUCALIGHT est un système d'éclairage intelligent conçu pour sublimer les pe
 
 ### Composants principaux
 - **Arduino RF-Nano** (ou Arduino Nano + module NRF24L01)
-- **Bandeau LED WS2812B** (jusqu'à 31 LEDs)
+- **Bandeau LED WS2812B** (Nombre de leds à définir par instrument)
 - **2 boutons poussoirs** (menu/palette)
 - **2 potentiomètres** (luminosité/paramètre)
 - **1 Boitier** (comprenant une alimentation 5V)
