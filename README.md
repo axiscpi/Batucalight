@@ -36,7 +36,7 @@ BATUCALIGHT est un système d'éclairage intelligent conçu pour sublimer les pe
 ### Composants principaux
 - **Arduino RF-Nano** (ou Arduino Nano + module NRF24L01)
 - **Bandeau LED WS2812B** (Nombre de leds à définir par instrument)
-- **2 boutons poussoirs** (menu/palette)
+- **2 boutons poussoirs ou tactils** (menu/palette)
 - **2 potentiomètres** (luminosité/paramètre)
 - **1 Boitier** (comprenant une alimentation 5V)
 
@@ -87,14 +87,20 @@ BATUCALIGHT a été conçu spécifiquement pour **BATUK'A DUNE**, la Batucada du
 
 **BATUCALIGHT**
 - Conception et réalisation : Matthieu DELANEF
+- PCB : Philippe DELANEF
 - Développement pour BATUK'A DUNE
 
 ## 📄 Licence
 
-Ce projet est sous licence libre. Vous êtes encouragés à :
-- ✅ Utiliser le code pour vos propres projets
-- ✅ Modifier et améliorer le système  
-- ✅ Partager vos améliorations avec la communauté
+L’ensemble du projet est publié sous licence **Creative Commons Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International (CC BY-NC-SA 4.0)**.
+
+👉 En clair :
+- ✅ Vous pouvez utiliser, modifier et partager le projet librement, en particulier dans le cadre associatif de votre orchestre ou batucada.
+- ✅ Vous devez créditer l’auteur original.
+- ⛔ Vous **ne pouvez pas** l’utiliser à des fins commerciales.
+- ✅ Les modifications doivent être partagées sous la même licence.
+
+Texte complet de la licence : [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 ---
 
