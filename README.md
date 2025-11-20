@@ -65,8 +65,8 @@ Ajustez ces paramètres dans `Batucalight.ino` :
 ## 🎛️ Utilisation
 
 ### Contrôles physiques
-- **Potard 1** : Régler la luminosité
-- **Potard 2** : Ajuster les paramètres d'effet
+- **Potentiomètre 1** : Régler la luminosité
+- **Potentiomètre 2** : Ajuster les paramètres d'effet
 - **Bouton 1** : Changer de mode d'éclairage
 - **Bouton 2** : Changer de palette (sauf en mode RF)
 
