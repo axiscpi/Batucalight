@@ -38,9 +38,11 @@ BATUCALIGHT est un système d'éclairage intelligent conçu pour sublimer les pe
 - **Bandeau LED WS2812B** (Nombre de leds à définir par instrument)
 - **2 boutons poussoirs ou tactils** (menu/palette)
 - **2 potentiomètres** (luminosité/paramètre)
-- **1 Boitier** (comprenant une alimentation 5V)
+- **1 Boitier** (fichiers STL dispo pour impression 3D)
+- **1 PCB** (fichiers gerbers dispos pour fabrication)
+- **1 alim 5V 18650** (+1 batterie 18650)
 
-## 🚀 Installation
+## 🚀 Installation arduino
 
 ### 1. Bibliothèques requises
 ```cpp
@@ -52,8 +54,6 @@ BATUCALIGHT est un système d'éclairage intelligent conçu pour sublimer les pe
 Ajustez ces paramètres dans `Batucalight.ino` :
 ```cpp
 #define NUMLEDS 31      // Nombre de LEDs
-#define MENUMAX 7       // Nombre de menus
-#define PALETTEMAX 4    // Nombre de palettes
 ```
 
 ### 3. Upload
